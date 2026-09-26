@@ -1,0 +1,183 @@
+#import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#Load cleaned dataset
+df = pd.read_csv("cleaned_banking_dataset.csv")
+
+print("First 5 rows:")
+print(df.head())
+
+print("\nDataset columns:")
+print(df.columns)
+
+print("\nDataset information:")
+print(df.info())
+
+#Setting a colorful Seaborn theme to produce colourful output
+sns.set_theme(style="whitegrid", palette="Set2")
+
+#Gender dist
+plt.figure(figsize=(7, 5))
+sns.countplot(
+    data=df,
+    x="Gender",
+    hue="Gender",
+    palette="pastel",
+    legend=False
+)
+plt.title("Gender Distribution")
+plt.xlabel("Gender")
+plt.ylabel("Number of Customers")
+plt.tight_layout()
+plt.show()
+
+#Acc. Bal. dist
+plt.figure(figsize=(8, 5))
+sns.histplot(
+    data=df,
+    x="AccountBalance",
+    bins=30,
+    kde=True,
+    color="mediumseagreen"
+)
+plt.title("Account Balance Distribution")
+plt.xlabel("Account Balance")
+plt.ylabel("Number of Customers")
+plt.tight_layout()
+plt.show()
+
+#Credit score dist
+plt.figure(figsize=(8, 5))
+sns.histplot(
+    data=df,
+    x="CreditScore",
+    bins=20,
+    kde=True,
+    color="orange"
+)
+plt.title("Credit Score Distribution")
+plt.xlabel("Credit Score")
+plt.ylabel("Number of Customers")
+plt.tight_layout()
+plt.show()
+
+#Occupation dist
+plt.figure(figsize=(10, 6))
+
+occupation_counts = df["Occupation"].value_counts().head(10)
+
+sns.barplot(
+    x=occupation_counts.values,
+    y=occupation_counts.index,
+    hue=occupation_counts.index,
+    palette="viridis",
+    legend=False
+)
+
+plt.title("Top 10 Occupations of Customers")
+plt.xlabel("Number of Customers")
+plt.ylabel("Occupation")
+plt.tight_layout()
+plt.show()
+
+#Annual inc. dist
+plt.figure(figsize=(8, 5))
+sns.histplot(
+    data=df,
+    x="AnnualIncome",
+    bins=30,
+    kde=True,
+    color="teal"
+)
+plt.title("Annual Income Distribution")
+plt.xlabel("Annual Income")
+plt.ylabel("Number of Customers")
+plt.tight_layout()
+plt.show()
+
+#Acc. type dist
+plt.figure(figsize=(7, 5))
+sns.countplot(
+    data=df,
+    x="AccountType",
+    hue="AccountType",
+    palette="Set2",
+    legend=False
+)
+plt.title("Account Type Distribution")
+plt.xlabel("Account Type")
+plt.ylabel("Number of Customers")
+plt.xticks(rotation=15)
+plt.tight_layout()
+plt.show()
+
+#Loan status dist
+plt.figure(figsize=(7, 5))
+sns.countplot(
+    data=df,
+    x="LoanStatus",
+    hue="LoanStatus",
+    palette="Set3",
+    legend=False
+)
+plt.title("Loan Status Distribution")
+plt.xlabel("Loan Status")
+plt.ylabel("Number of Customers")
+plt.tight_layout()
+plt.show()
+
+#Correlation heatmap
+numeric_df = df.select_dtypes(include="number")
+plt.figure(figsize=(12, 8))
+correlation = numeric_df.corr()
+sns.heatmap(
+    correlation,
+    annot=True,
+    cmap="coolwarm",
+    linewidths=0.5,
+    fmt=".2f"
+)
+plt.title("Correlation Heatmap of Numerical Features")
+plt.tight_layout()
+plt.show()
+
+#Box plot for account balance
+plt.figure(figsize=(8, 5))
+sns.boxplot(
+    data=df,
+    x="AccountBalance",
+    color="lightgreen"
+)
+plt.title("Account Balance Boxplot")
+plt.xlabel("Account Balance")
+plt.tight_layout()
+plt.show()
+
+#Credit Score vs Account Balance
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=df,
+    x="CreditScore",
+    y="AccountBalance",
+    hue="Gender",
+    palette="Set1"
+)
+plt.title("Credit Score vs Account Balance")
+plt.xlabel("Credit Score")
+plt.ylabel("Account Balance")
+plt.tight_layout()
+plt.show()
+
+#end
+print("="*50)
+print("Task 3 Data Visualisation completed successfully")
+print("Program Executed Successfully!")
+print("="*50)
+
+
+
+
+
+

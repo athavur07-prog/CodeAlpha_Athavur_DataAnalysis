@@ -1,0 +1,159 @@
+#importing libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#Load dataset
+df = pd.read_csv("cleaned_banking_dataset.csv")
+print("=" * 50)
+print("EXPLORATORY DATA ANALYSIS")
+print("==================================================")
+
+#display info
+print("\nFIRST 5 ROWS")
+print(df.head())
+
+print("\nDATASET SHAPE")
+print("Rows:", df.shape[0])
+print("Columns:", df.shape[1])
+
+print("\nCOLUMN NAMES")
+print(df.columns.tolist())
+
+print("\nDATASET INFO")
+print(df.info())
+
+#Datatypes
+print("\nDATA TYPES")
+print(df.dtypes)
+
+#missing
+print("\n Missing values:",df.isnull().sum())
+
+#duplicated
+print("\n Duplicate rows:",df.duplicated().sum())
+
+#CHECK DUPLICATE TRANSACTION IDs
+print("\nDuplicate Transaction IDs:")
+print(df["TransactionID"].duplicated().sum())
+
+#summary
+print("\nStatistical Summary")
+print(df.describe())
+
+#imp. categorical info
+print("\nTRANSACTION TYPE")
+print(df["TransactionType"].value_counts())
+
+print("\nTRANSACTION STATUS")
+print(df["TransactionStatus"].value_counts())
+
+print("\nACCOUNT TYPE")
+print(df["AccountType"].value_counts())
+
+print("\nLOAN STATUS")
+print(df["LoanStatus"].value_counts())
+
+#outlier check Analysis
+print("\nOUTLIER CHECK")
+
+numeric_columns = [
+    "Age",
+    "AccountBalance",
+    "TransactionAmount",
+    "CreditScore",
+    "AnnualIncome"
+]
+
+for column in numeric_columns:
+
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+
+    IQR = Q3 - Q1
+
+    lower_limit = Q1 - 1.5 * IQR
+    upper_limit = Q3 + 1.5 * IQR
+
+    outliers = df[
+        (df[column] < lower_limit) |
+        (df[column] > upper_limit)
+    ]
+
+    print(column, "->", len(outliers), "outliers")
+
+#key and simple insight of knowledge
+print("\nKEY INSIGHTS")
+
+print("Total customers/records:", len(df))
+
+print("Average transaction amount:",round(df["TransactionAmount"].mean(), 2))
+
+print("Average account balance:",round(df["AccountBalance"].mean(), 2))
+
+print("Average credit score:",round(df["CreditScore"].mean(), 2))
+
+print("Most common transaction type:",df["TransactionType"].mode()[0])
+
+print("Most common account type:",df["AccountType"].mode()[0])
+
+print("Most common transaction status:",df["TransactionStatus"].mode()[0])
+
+negative_balance = (df["AccountBalance"] < 0).sum()
+print("\nNegative Account Balances:",negative_balance)
+
+#Visuals
+#Transaction Amt
+plt.figure(figsize=(8, 5))
+sns.histplot(
+    data=df,
+    x="TransactionAmount",
+    bins=30,
+    kde=True,
+    color="purple"
+)
+plt.title("Transaction Amount Distribution")
+plt.xlabel("Transaction Amount")
+plt.ylabel("Number of Transactions")
+plt.tight_layout()
+plt.show()
+
+#Transaction type
+plt.figure(figsize=(8, 5))
+sns.countplot(
+    data=df,
+    x="TransactionType",
+    hue="TransactionType",
+    palette="Set1",
+    legend=False
+)
+plt.title("Transaction Type Distribution")
+plt.xlabel("Transaction Type")
+plt.ylabel("Number of Transactions")
+plt.tight_layout()
+plt.show()
+
+#Transaction type vs amt
+plt.figure(figsize=(9, 5))
+sns.boxplot(
+    data=df,
+    x="TransactionType",
+    y="TransactionAmount",
+    hue="TransactionType",
+    palette="Set2",
+    legend=False
+)
+plt.title("Transaction Amount by Transaction Type")
+plt.xlabel("Transaction Type")
+plt.ylabel("Transaction Amount")
+plt.xticks(rotation=15)
+plt.tight_layout()
+plt.show()
+
+#end
+print("="*50)
+print("Exploratory Data Analysis Completed Succesfully")
+print("Task 2 executed successfully")
+print("="*50)
+
